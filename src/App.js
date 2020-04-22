@@ -1,26 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react';
+import { Switch, Route } from 'react-router-dom';
+import HomePage from './components/pages/HomePage';
+import UserDetailPage from './components/pages/UserDetailPage';
+import { connect } from 'react-redux';
+import { getUsers } from './redux/actions';
+import { ErrorPage } from './components/pages/ErrorPage';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = ({ fetchData }) => {
+    useEffect(() => {
+        fetchData();
+    }, []);
 
-export default App;
+    return (
+        <div>
+            <div className="container pt-3">
+                <Switch>
+                    <Route path="/" exact component={HomePage} />
+                    <Route path="/users/:id" component={UserDetailPage} />
+                    <Route path="*" component={ErrorPage} />
+                </Switch>
+            </div>
+        </div>
+    );
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        fetchData: () => {
+            dispatch(getUsers());
+        }
+    }
+};
+
+export default connect(null, mapDispatchToProps)(App);

@@ -9,7 +9,7 @@ import { ErrorPage } from './components/pages/ErrorPage';
 const App = ({ fetchData }) => {
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [fetchData]);
 
     return (
         <div>

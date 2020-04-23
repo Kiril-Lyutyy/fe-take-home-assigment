@@ -6,7 +6,6 @@ import {
     SUBMIT_FORM_FAILURE,
     SUBMIT_FORM_STARTED,
 } from './types';
-import { sortArrFunc } from '../helpers/helpers';
 
 const initialState = {
     users: [],
@@ -32,7 +31,8 @@ export const rootReducer = (state = initialState, action) => {
         case FETCH_DATA_SUCCESS:
             return {
                 ...state,
-                users: action.payload,
+                users: action.payload[0].data,
+                posts: action.payload[1].data,
                 loading: false,
                 error: '',
             };
@@ -50,7 +50,7 @@ export const rootReducer = (state = initialState, action) => {
         case SUBMIT_FORM_SUCCESS:
             return {
                 ...state,
-                users: [ ...state.users, action.payload ].sort(sortArrFunc),
+                users: [ ...state.users, action.payload ],
                 loading: false,
                 error: '',
             };

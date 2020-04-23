@@ -1,19 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { NavLink } from "react-router-dom";
+import { NavLink } from 'react-router-dom';
+import { SortAlphabetically } from '../../helpers/helpers';
 
-const UserDetailPage = ({ match, users }) => {
+const UserDetailPage = ({ match, users, posts }) => {
     const { params } = match;
+
     const [ user, setUser ] = useState({});
     useEffect(() => {
-        if (users && users.length) setUser(users.filter(user => +user.id === +params.id)[0]);
-    }, [users]);
+        if (users && users.length)
+            setUser(users
+                .filter(user => +user.id === +params.id)[0]);
+    }, [users, params.id]);
+
+    const [ userPosts, setUserPosts ] = useState([]);
+    useEffect(() => {
+        if (posts && posts.length)
+            setUserPosts(posts
+                .filter(post => +post.userId === +params.id)
+                .sort(SortAlphabetically));
+    }, [posts, params.id]);
 
     return (
         <div className="row">
             <div className="col">
                 { user ?
-                    <div>
+                    <div key={user.id}>
                         <NavLink to="/" exact className="nav-link">Back to main page</NavLink>
                         <div className="card mb-4">
                             <div className="card-body">
@@ -31,6 +43,7 @@ const UserDetailPage = ({ match, users }) => {
                         </div>
                     </div>
                 : `User with id ${params.id} not found...` }
+                { userPosts && userPosts.map(post => <p key={post.id}>{post.title}</p>) }
             </div>
         </div>
     )
@@ -39,6 +52,7 @@ const UserDetailPage = ({ match, users }) => {
 const mapStateToProps = state => {
     return {
         users: state.users,
+        posts: state.posts,
     }
 };
 

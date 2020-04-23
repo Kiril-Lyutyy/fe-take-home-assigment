@@ -7,14 +7,15 @@ import {
     SUBMIT_FORM_FAILURE,
     SUBMIT_FORM_STARTED,
 } from './types';
-import { sortArrFunc } from '../helpers/helpers';
 
 const url = 'https://jsonplaceholder.typicode.com';
 
-export function fetchDataSuccess(users) {
+export function fetchDataSuccess(data) {
+    const storedData = localStorage.getItem('fetchedData');
+    if (!storedData) localStorage.setItem('fetchedData', JSON.stringify(data));
     return {
         type: FETCH_DATA_SUCCESS,
-        payload: users,
+        payload: data,
     }
 }
 
@@ -34,23 +35,19 @@ export function fetchDataStarted() {
 export function getUsers() {
     return dispatch => {
         dispatch(fetchDataStarted());
+        const storedData = localStorage.getItem('fetchedData');
+        if (storedData) {
+            const parsedData = JSON.parse(storedData);
+            dispatch(fetchDataSuccess(parsedData));
+            return;
+        }
         axios
             .all([
                 axios.get(`${url}/users/`),
                 axios.get(`${url}/posts/`)
             ])
             .then(axios.spread((...responses) => {
-                const users = responses[0].data;
-                const posts = responses[1].data;
-                const usersWithPosts = users
-                    .sort(sortArrFunc)
-                    .map(user => {
-                        user.posts = posts
-                            .filter(post => post.userId === user.id)
-                            .sort(sortArrFunc);
-                        return user;
-                    });
-                dispatch(fetchDataSuccess(usersWithPosts));
+                dispatch(fetchDataSuccess(responses));
             }))
             .catch(err => {
                 dispatch(fetchDataFailure('Error fetching data...'));
@@ -74,11 +71,14 @@ export function submitFormData(userName) {
             .catch(err => {
                 dispatch(submitFormFailure('Error submitting form...'));
             })
-
     }
 }
 
 export function submitFormSuccess(user) {
+    const storedData = localStorage.getItem('fetchedData');
+    const data = JSON.parse(storedData);
+    data[0].data = [user, ...data[0].data];
+    localStorage.setItem('fetchedData', JSON.stringify(data));
     return {
         type: SUBMIT_FORM_SUCCESS,
         payload: user,

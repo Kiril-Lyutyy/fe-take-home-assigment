@@ -40,6 +40,7 @@ export const rootReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: true,
+                error: '',
             };
         case SUBMIT_FORM_FAILURE:
             return {

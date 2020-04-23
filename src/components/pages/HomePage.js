@@ -7,23 +7,30 @@ import { SortAlphabetically } from '../../helpers/helpers';
 export const HomePage = ({ users, posts, error }) => {
     return (
         <div className="row">
-            <div className="col-lg-6 col-md-8 col-sm-12">
+            <div className="col-12">
                 { error && <div className="alert alert-danger" role="alert">{ error }</div> }
                 <CreateUserForm/>
-                { users?.sort(SortAlphabetically).map(user => {
-                    return (
-                        <div className="card mb-4" key={user.id}>
-                            <div className="card-body">
-                                <h5 className="card-title">
-                                    <NavLink user={user} to={`/users/${user.id}`}>{user.name}</NavLink>
-                                </h5>
-                                { posts?.filter(post => post.userId === user.id).sort(SortAlphabetically).map(post =>
-                                    <p key={post.id}>{post.title}</p>
-                                ) }
+                <hr />
+                <div className="row">
+                    { users?.sort(SortAlphabetically).map(user => {
+                        return (
+                            <div className="col-lg-4 col-md-6 col-sm-12" key={user.id}>
+                                <div className="card mb-4 bg-light">
+                                    <div className="card-header">
+                                        <h5 className="card-title m-0">
+                                            <NavLink user={user} to={`/users/${user.id}`}>{user.name}</NavLink>
+                                        </h5>
+                                    </div>
+                                    <div className="card-body">
+                                        { posts?.filter(post => post.userId === user.id).sort(SortAlphabetically).map(post =>
+                                            <p key={post.id}>{post.title}</p>
+                                        ) }
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    )
-                }) }
+                        )
+                    }) }
+                </div>
             </div>
         </div>
     )

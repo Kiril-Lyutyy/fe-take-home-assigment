@@ -33,8 +33,8 @@ class CreateUserForm extends React.Component {
             <div>
                 <h5>Create new user</h5>
                 <form onSubmit={this.submitHandler}>
-                    <div className="form-group">
-                        <label htmlFor="exampleInputEmail1">*User name</label>
+                    <div className="form-group w-50">
+                        <label htmlFor="exampleInputEmail1"><b>*</b> User name</label>
                         <input
                             required
                             type="text"
@@ -44,7 +44,7 @@ class CreateUserForm extends React.Component {
                             name="newUserName"
                             onChange={this.changeInputHandler}/>
                     </div>
-                    <button disabled={!!this.props.loading} type="submit" className="btn btn-primary mb-4">
+                    <button disabled={!!this.props.loading} type="submit" className="btn btn-primary btn-lg mb-4">
                         { !this.props.loading ? 'Submit' : 'Loading...' }
                     </button>
                 </form>

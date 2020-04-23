@@ -23,14 +23,15 @@ const UserDetailPage = ({ match, users, posts }) => {
 
     return (
         <div className="row">
+            <div className="col-12 p-0"><NavLink to="/" exact className="nav-link">Back to main page</NavLink></div>
             <div className="col">
                 { user ?
                     <div key={user.id}>
-                        <NavLink to="/" exact className="nav-link">Back to main page</NavLink>
-                        <div className="card mb-4">
+                        <div className="card mb-4 bg-light">
+                            <div className="card-header">
+                                <h4 className="card-title">{ user?.name }</h4>
+                            </div>
                             <div className="card-body">
-                                <h5 className="card-title">{ user?.name }</h5>
-                                <hr />
                                 <p><b>username:</b> { user?.username }</p>
                                 <p><b>street:</b> { user?.address?.street }</p>
                                 <p><b>suite:</b> { user?.address?.suite }</p>
@@ -43,6 +44,7 @@ const UserDetailPage = ({ match, users, posts }) => {
                         </div>
                     </div>
                 : `User with id ${params.id} not found...` }
+                { userPosts ? <h5>User posts:</h5> : '' }
                 { userPosts && userPosts.map(post => <p key={post.id}>{post.title}</p>) }
             </div>
         </div>

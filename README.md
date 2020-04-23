@@ -1,4 +1,4 @@
-To start the project localy run "yarn install" and then "yarn start"
+To start the project locally run "yarn install" and then "yarn start"
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
